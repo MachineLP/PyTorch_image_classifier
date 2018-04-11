@@ -1,4 +1,8 @@
 # coding=utf-8
+"""
+Created on 2017 10.17
+@author: liupeng
+"""
 
 import tensorflow as tf 
 import numpy as np 
