@@ -1,4 +1,9 @@
-#coding=utf-8
+# coding=utf-8
+"""
+Created on 2017 10.17
+@author: liupeng
+"""
+
 import tensorflow as tf
 slim = tf.contrib.slim
 import numpy as np
