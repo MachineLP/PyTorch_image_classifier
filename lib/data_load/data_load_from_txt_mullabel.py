@@ -1,4 +1,8 @@
-#coding=utf-8
+# coding=utf-8
+"""
+Created on 2017 10.17
+@author: liupeng
+"""
 
 from lib.utils.multi_label_utils import shuffle_train_data
 
