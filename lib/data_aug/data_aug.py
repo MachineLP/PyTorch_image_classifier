@@ -1,4 +1,8 @@
 # coding=utf-8
+"""
+Created on 2017 10.17
+@author: liupeng
+"""
 
 import numpy as np
 import cv2
