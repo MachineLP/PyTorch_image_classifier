@@ -2,6 +2,8 @@
 """
 Created on 2017 10.17
 @author: liupeng
+wechat: lp9628
+blog: http://blog.csdn.net/u014365862/article/details/78422372
 """
 
 from lib.utils.multi_label_utils import shuffle_train_data
