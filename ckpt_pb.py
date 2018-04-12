@@ -1,4 +1,10 @@
 # coding = utf-8
+"""
+Created on 2017 10.17
+@author: liupeng
+wechat: lp9628
+blog: http://blog.csdn.net/u014365862/article/details/78422372
+"""
 
 import tensorflow as tf 
 from tensorflow.python.framework import graph_util
@@ -19,7 +25,7 @@ arch_model = config.arch_model
 
 X = tf.placeholder(tf.float32, [None, height, width, 3], name = "inputs_placeholder")
 net, net_vis = build_net(X, num_classes, 1.0, False, arch_model)
-net = tf.nn.softmax(net)
+net = tf.nn.sigmoid(net)
 predict = tf.reshape(net, [-1, num_classes], name='predictions')
 
 
