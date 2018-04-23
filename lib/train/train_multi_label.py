@@ -38,9 +38,9 @@ def train_multi_label(train_data,train_label,valid_data,valid_label,train_dir,nu
     init = tf.global_variables_initializer()
     sess.run(init)
     saver2 = tf.train.Saver(tf.global_variables())
-    if not train_all_layers:
-        saver_net = tf.train.Saver(variables_to_restore)
-        saver_net.restore(sess, checkpoint_path)
+    # if not train_all_layers:
+    saver_net = tf.train.Saver(variables_to_restore)
+    saver_net.restore(sess, checkpoint_path)
     
     if fine_tune:
         # saver2.restore(sess, fine_tune_dir)
