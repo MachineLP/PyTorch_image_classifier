@@ -38,7 +38,7 @@ def read_image(file_queue, num_classes, height, width):
 
 def read_image_batch(file_queue, num_classes, batchsize, height, width):
     img, label = read_image(file_queue, num_classes, height, width)
-    min_after_dequeue = 2
+    min_after_dequeue = 2000
     capacity = min_after_dequeue + 3 * batchsize
     # image_batch, label_batch = tf.train.batch([img, label], batch_size=batchsize, capacity=capacity)
     image_batch, label_batch = tf.train.shuffle_batch([img, label], batch_size=batchsize, capacity=capacity, min_after_dequeue=min_after_dequeue)
