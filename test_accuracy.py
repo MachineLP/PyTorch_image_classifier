@@ -34,7 +34,8 @@ print ('valid_n', valid_n)
 X, Y, is_train, keep_prob_fc = input_placeholder(height, width, num_classes)
 net, _ = build_net_multi_label(X, num_classes, keep_prob_fc, is_train,arch_model)
 loss = cost(Y, net)
-accuracy = model_mAP(net, Y)
+pre = tf.nn.sigmoid(net)
+accuracy = model_mAP(pre, Y)
 # predict = tf.reshape(net, [-1, num_classes], name='predictions')
 
 
@@ -53,10 +54,9 @@ if __name__ == '__main__':
     test_acc = 0
     for batch_i in range(int(test_n/batch_size)):
             images_test, labels_test = get_next_batch_from_path(test_data, test_label, batch_i, height, width, batch_size=batch_size, training=False)
-            epoch_ls, epoch_acc = sess.run([loss, accuracy], feed_dict={X: images_test, Y: labels_test, keep_prob_fc:1.0, is_train:False})
+            epoch_ls, epoch_acc, pred = sess.run([loss, accuracy, pre], feed_dict={X: images_test, Y: labels_test, keep_prob_fc:1.0, is_train:False})
             print (epoch_acc)
+            print (pred)
             test_ls = test_ls + epoch_ls
             test_acc = test_acc + epoch_acc
     print('Epoch: {:>2}: Validation loss: {:>3.5f}, Validation accuracy: {:>3.5f}'.format(0, test_ls/int(test_n/batch_size), test_acc/int(test_n/batch_size)))
-
-
