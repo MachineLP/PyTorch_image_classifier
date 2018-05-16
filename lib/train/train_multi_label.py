@@ -32,7 +32,8 @@ def train_multi_label(train_data,train_label,valid_data,valid_label,train_dir,nu
     if train_all_layers:
         variables_to_train = []
     optimizer = train_op(learning_rate, loss, variables_to_train, global_step)
-    accuracy = model_mAP(net, Y)
+    pre = tf.nn.sigmoid(net)
+    accuracy = model_mAP(pre, Y)
     #------------------------------------------------------------------------------------#
     sess = tf.Session()
     init = tf.global_variables_initializer()
