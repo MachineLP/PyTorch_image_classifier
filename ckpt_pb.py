@@ -6,9 +6,10 @@ wechat: lp9628
 blog: http://blog.csdn.net/u014365862/article/details/78422372
 """
 
-import tensorflow as tf 
+import tensorflow as tf
 from tensorflow.python.framework import graph_util
-from lib.utils.utils import input_placeholder, g_parameter, build_net
+from lib.utils.multi_label_utils import get_next_batch_from_path, shuffle_train_data
+from lib.utils.multi_label_utils import input_placeholder, build_net_multi_label, cost, train_op, model_mAP
 import cv2
 import numpy as np
 import os
@@ -24,7 +25,7 @@ num_classes = config.num_classes
 arch_model = config.arch_model
 
 X = tf.placeholder(tf.float32, [None, height, width, 3], name = "inputs_placeholder")
-net, net_vis = build_net(X, num_classes, 1.0, False, arch_model)
+net, net_vis = build_net_multi_label(X, num_classes, 1.0, False, arch_model)
 net = tf.nn.sigmoid(net)
 predict = tf.reshape(net, [-1, num_classes], name='predictions')
 
