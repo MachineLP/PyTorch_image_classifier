@@ -70,7 +70,8 @@ def train_multi_label_tfRecords(train_file_tfRecord,valid_file_tfRecord,train_di
     if train_all_layers:
         variables_to_train = []
     optimizer = train_op(learning_rate, loss, variables_to_train, global_step)
-    accuracy = model_mAP(net, Y)
+    pre = tf.nn.sigmoid(net)
+    accuracy = model_mAP(pre, Y)
     #------------------------------------------------------------------------------------#
     sess = tf.InteractiveSession()
     tf.local_variables_initializer().run()
