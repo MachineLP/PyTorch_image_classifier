@@ -107,9 +107,9 @@ def train_multi_label_tfRecords(train_file_tfRecord,valid_file_tfRecord,train_di
             # print (train_image)
             # print (train_label)
             los, _ = sess.run([loss,optimizer], feed_dict={X: train_image, Y: train_label, is_train:True, keep_prob_fc:dropout_prob})
-            print (los)
-            checkpoint_path = os.path.join(train_dir, 'model.ckpt')
-            saver2.save(sess, checkpoint_path, global_step=batch_i, write_meta_graph=False)
+            # print (los)
+            #checkpoint_path = os.path.join(train_dir, 'model.ckpt')
+            #saver2.save(sess, checkpoint_path, global_step=batch_i, write_meta_graph=False)
             if batch_i%20==0:
                 loss_, acc_ = sess.run([loss, accuracy], feed_dict={X: train_image, Y: train_label, is_train:False, keep_prob_fc:1.0})
                 print('Batch: {:>2}: Training loss: {:>3.5f}, Training mAP: {:>3.5f}'.format(batch_i, loss_, acc_))
@@ -120,7 +120,9 @@ def train_multi_label_tfRecords(train_file_tfRecord,valid_file_tfRecord,train_di
                 valid_image, valid_label = sess.run([valid_image, valid_labels])
                 ls, acc = sess.run([loss, accuracy], feed_dict={X: valid_image, Y: valid_label, is_train:False, keep_prob_fc:1.0})
                 print('Batch: {:>2}: Validation loss: {:>3.5f}, Validation mAP: {:>3.5f}'.format(batch_i, ls, acc))
-            
+            if batch_i%500==0:
+                checkpoint_path = os.path.join(train_dir, 'model.ckpt')
+                saver2.save(sess, checkpoint_path, global_step=batch_i, write_meta_graph=False)
         
         print('Epoch===================================>: {:>2}'.format(epoch_i))
         valid_ls = 0
