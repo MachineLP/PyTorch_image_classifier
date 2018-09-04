@@ -131,8 +131,8 @@ def train_multi_label_tfRecords(train_file_tfRecord,valid_file_tfRecord,train_di
             valid_image = tf.image.resize_images(valid_images, (height, width), method=0)
             valid_image = (tf.cast(valid_image, tf.float32)/255 - 0.5)*2
             valid_image, valid_label = sess.run([valid_image, valid_labels])
-            images_valid, labels_valid = get_next_batch_from_path(valid_image, valid_label, batch_i, height, width, batch_size=batch_size, training=False)
-            epoch_ls, epoch_acc = sess.run([loss, accuracy], feed_dict={X: images_valid, Y: labels_valid, keep_prob_fc:1.0, is_train:False})
+            # images_valid, labels_valid = get_next_batch_from_path(valid_image, valid_label, batch_i, height, width, batch_size=batch_size, training=False)
+            epoch_ls, epoch_acc = sess.run([loss, accuracy], feed_dict={X: valid_image, Y: valid_label, keep_prob_fc:1.0, is_train:False})
             valid_ls = valid_ls + epoch_ls
             valid_acc = valid_acc + epoch_acc
         print('Epoch: {:>2}: Validation loss: {:>3.5f}, Validation mAP: {:>3.5f}'.format(epoch_i, valid_ls/int(valid_n/batch_size), valid_acc/int(valid_n/batch_size)))
