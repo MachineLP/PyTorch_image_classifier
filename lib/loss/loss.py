@@ -129,3 +129,82 @@ def add_l2(loss, weight_decay):
     reduced_loss = tf.reduce_mean(loss) + tf.add_n(l2_losses)
     return reduced_loss
 
+
+'''
+  # 根据label及其阈值，得到positive的mask。
+  pos_mask = tf.reduce_sum(
+               tf.cast(
+                 tf.greater_equal(
+                   labels, tf.fill(tf.shape(labels), FLAGS.mask_thres)), 
+                   tf.float32), 
+             0)
+  # 
+  pos_curr_count = tf.cast(tf.greater(   pos_mask, 0), tf.float32)
+  # negative的mask。
+  neg_curr_count = tf.cast(tf.less_equal(pos_mask, 0), tf.float32)
+
+  pos_count = tf.Variable(tf.zeros(shape=[FLAGS.class_num,]),  trainable=False)
+  neg_count = tf.Variable(tf.zeros(shape=[FLAGS.class_num,]),  trainable=False)
+
+  # how many class within only negtive samples in a batch select to learn， 每个batch只选择一部分的negative去学习。
+  neg_select = tf.cast(
+                 tf.less_equal(
+                    tf.random_uniform(
+                      shape=[FLAGS.class_num,], 
+                      minval=0, maxval=1,
+                      seed = FLAGS.random_seed),
+                    FLAGS.neg_select), 
+                 tf.float32)
+  tf.summary.histogram('pos_curr_count', pos_curr_count)
+  tf.summary.histogram('neg_curr_count', neg_curr_count)
+  tf.summary.histogram('neg_select', neg_select)
+
+  with tf.control_dependencies([pos_curr_count, neg_curr_count, neg_select]):
+
+    pos_count = tf.assign_sub(
+                   tf.assign_add(pos_count, pos_curr_count),
+                   tf.multiply(pos_count, neg_curr_count))
+    neg_count = tf.assign_sub(
+                   tf.assign_add(neg_count, tf.multiply(neg_curr_count, neg_select)),
+                   tf.multiply(neg_count, pos_curr_count))
+    tf.summary.histogram('pos_count', pos_count)
+    tf.summary.histogram('neg_count', neg_count)
+  
+  pos_loss_coef = -1 * (tf.log((0.01 + pos_count)/10)/tf.log(10.0))
+  pos_loss_coef = tf.where(
+                    tf.greater(pos_loss_coef, tf.fill(tf.shape(pos_loss_coef), 0.01)),
+                    pos_loss_coef,
+                    tf.fill(tf.shape(pos_loss_coef), 0.01))
+  pos_loss_coef = tf.multiply(pos_loss_coef, pos_curr_count)
+  
+  tf.summary.histogram('pos_loss_coef', pos_loss_coef)
+  neg_loss_coef = -1 * (tf.log((8 + neg_count)/10)/tf.log(10.0))
+  neg_loss_coef = tf.where(
+                   tf.greater(neg_loss_coef, tf.fill(tf.shape(neg_loss_coef), 0.01)),
+                   neg_loss_coef,
+                   tf.fill(tf.shape(neg_loss_coef), 0.001))
+  neg_loss_coef = tf.multiply(neg_loss_coef, tf.multiply(neg_curr_count, neg_select))
+  tf.summary.histogram('neg_loss_coef', neg_loss_coef)
+  loss_coef = tf.add(pos_loss_coef, neg_loss_coef)
+  tf.summary.histogram('loss_coef', loss_coef)
+
+  # b. get non-negative mask
+  non_neg_mask = tf.fill(tf.shape(labels), -1.0, name='non_neg')
+  non_neg_mask = tf.cast(tf.not_equal(labels, non_neg_mask), tf.float32)
+  tf.summary.histogram('non_neg', non_neg_mask)
+
+  # cal loss
+  cross_entropy = tf.nn.weighted_cross_entropy_with_logits(
+       logits=logits, targets=labels, pos_weight=12, name='sigmod_cross_entropy')
+  tf.summary.histogram('sigmod_ce', cross_entropy)
+  cross_entropy_cost = tf.reduce_sum(tf.reduce_mean(cross_entropy * non_neg_mask, axis=0) * loss_coef)
+
+  # Create a tensor named cross_entropy for logging purposes.
+  tf.identity(cross_entropy_cost, name='cross_entropy')
+  tf.summary.scalar('cross_entropy', cross_entropy_cost)
+
+  # Add weight decay to the loss. We exclude the batch norm variables because
+  # doing so leads to a small improvement in accuracy.
+  loss = cross_entropy_cost + FLAGS.weight_decay * tf.add_n(
+    [tf.nn.l2_loss(v) for v in tf.trainable_variables() if 'batch_normalization' not in v.name])
+'''
