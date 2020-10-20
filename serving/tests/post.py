@@ -8,14 +8,14 @@ import argparse
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--url', help="update mode", type=str, default="")
+    parser.add_argument('--url', help="update mode", type=str, default="https://st0.dancf.com/www/15018/design/20180521-101156-6.png")
     args = parser.parse_args()
     return args
 
 if __name__ == '__main__':
     args = parse_args()
     url = "http://127.0.0.1:9949/infer"
-    print ( ">>>>>", args.text )
+    print ( ">>>>>", args.url )
     json_data = json.dumps( {"content": args.url} )
     headers = {'content-type': 'application/json'}
     start_time = time.time()

@@ -28,6 +28,7 @@ from qdnet.models.effnet import Effnet
 from qdnet.models.resnest import Resnest
 from qdnet.models.se_resnext import SeResnext
 from qdnet.loss.loss import Loss
+from qdnet.conf.constant import Constant
 
 
 parser = argparse.ArgumentParser(description='Hyperparams')
@@ -198,11 +199,11 @@ if __name__ == '__main__':
     os.makedirs(config["log_dir"], exist_ok=True)    
     os.environ['CUDA_VISIBLE_DEVICES'] = config["CUDA_VISIBLE_DEVICES"]
 
-    if config["enet_type"] == 'resnest101':   
+    if config["enet_type"] in Constant.RESNEST_LIST:   
         ModelClass = Resnest
-    elif config["enet_type"] == 'seresnext101':
+    elif config["enet_type"] in Constant.SERESNEXT_LIST:
         ModelClass = SeResnext
-    elif 'efficientnet' in config["enet_type"]:
+    elif config["enet_type"] in Constant.GEFFNET_LIST:
         ModelClass = Effnet
     else:
         raise NotImplementedError()

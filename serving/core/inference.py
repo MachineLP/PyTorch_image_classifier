@@ -17,6 +17,7 @@ from flask_restful import Resource,Api
 from core.models import QDNetModel
 from qdnet.conf.config import load_yaml
 from flask import Flask,abort, make_response, request, jsonify
+from serving.core.url2img import url2imgcv2
 
 parser = argparse.ArgumentParser(description='Hyperparams')
 parser.add_argument('--config_path', help='config file path')
@@ -40,7 +41,7 @@ class QDNetInference(Resource):
             logging.info( "[QDNetInference] [post] request.json:{}".format( request.json ) )
             url = request.json["content"]
             logging.info( "[QDNetInference] [post] url:{}".format( url ) )
-            data = download(url)
+            data = url2imgcv2(url)
             pre = qdnet_model.predict(data)
             res = { "code": "200", "data": pre, "message": "" }
             return jsonify ( res )
