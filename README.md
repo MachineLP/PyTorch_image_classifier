@@ -86,6 +86,9 @@ python test.py --config_path "conf/effb3_ns.yaml"
 （2）https://github.com/BADBADBADBOY/pytorchOCR
 （3）https://github.com/MachineLP/QDServing
 （4）https://github.com/bentoml/BentoML
+（5）mixup-cutmix:https://blog.csdn.net/u014365862/article/details/104216086
+（7）focalloss:https://blog.csdn.net/u014365862/article/details/104216192
+（8）https://blog.csdn.net/u014365862/article/details/106728375 / https://blog.csdn.net/u014365862/article/details/106728402 
 ```
 
 
