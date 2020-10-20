@@ -55,7 +55,7 @@ python test.py --config_path "conf/effb3_ns.yaml"
 
 6、模型部署
 ```
-serving
+[serving](./serving/) 
 ```
 
 
