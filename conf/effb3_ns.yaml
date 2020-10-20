@@ -1,0 +1,21 @@
+
+data_dir : "./data/"
+data_folder : "./data/"
+image_size : 512
+enet_type : "tf_efficientnet_b3_ns"  # tf_efficientnet_b4_ns/resnest101/seresnext101
+batch_size : 8
+num_workers : 4
+init_lr : 3e-5
+out_dim : 2
+n_epochs : 15
+drop_nums : 1
+use_amp : False
+mixup_cutmix : False
+model_dir : "./tf_efficientnet_b3_ns/weight/"
+log_dir : "./tf_efficientnet_b3_ns/logs/"
+CUDA_VISIBLE_DEVICES : "0"
+fold : "0,1,2,3,4"
+pretrained : True
+eval : "best"                  # "best", "final"
+oof_dir : "./tf_efficientnet_b3_ns/oofs/"
+auc_index : "male"

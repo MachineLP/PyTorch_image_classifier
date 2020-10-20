@@ -1,0 +1,13 @@
+version: '2.3'
+services:
+  tensorflowtts:
+    build: .
+    restart: always
+    ports:
+      - "9930-9939:9930-9939"
+    volumes:
+      - .:/workspace
+    tty: true
+    command: python serving/flask_run.py --config_path "conf/effb3_ns.yaml" --fold "0" > run.log
+    environment:
+      - CUDA_VISIBLE_DEVICES=2

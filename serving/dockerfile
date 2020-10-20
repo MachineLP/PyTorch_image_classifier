@@ -1,0 +1,27 @@
+FROM tensorflow/tensorflow:2.2.0-gpu
+RUN apt-get update
+RUN apt-get install -y zsh tmux wget git libsndfile1
+RUN pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install torch==1.5.1 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install resnest==0.0.6b20200823 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install geffnet==0.9.8 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install opencv_python==4.4.0.42 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install pretrainedmodels==0.7.4 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install Pillow==7.2.0 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install grpcio-tools==1.31.0 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install ipython -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install flask==1.1.2 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install requests==2.23.0 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install gunicorn==19.9.0 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install flask_restful==0.3.8 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install jieba==0.42.1 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install dataclasses==0.6 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install zipp==3.1.0 -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip --default-timeout=600 install pandas==1.0.5 -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+
+RUN mkdir /workspace
+WORKDIR /workspace
+
+COPY ../ /workspace
+
