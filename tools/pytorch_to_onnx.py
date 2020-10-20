@@ -1,4 +1,5 @@
 #-*- coding:utf-8 _*-
+import os
 import sys
 sys.path.append('./')
 import yaml
@@ -14,10 +15,23 @@ import onnxruntime
 from PIL import Image
 from qdnet.dataaug.dataaug import get_transforms
 from qdnet.conf.config import load_yaml
-from ptocr.utils.util_function import create_module,load_model
+
+from qdnet.conf.config import load_yaml
+from qdnet.optimizer.optimizer import GradualWarmupSchedulerV2
+from qdnet.dataset.dataset import get_df, QDDataset
+from qdnet.dataaug.dataaug import get_transforms
+from qdnet.models.effnet import Effnet
+from qdnet.models.resnest import Resnest
+from qdnet.models.se_resnext import SeResnext
+from qdnet.loss.loss import Loss
+from qdnet.conf.constant import Constant
 
 parser = argparse.ArgumentParser(description='Hyperparams')
+parser.add_argument('--img_path', nargs='?', type=str, default=None)
 parser.add_argument('--config_path', help='config file path')
+parser.add_argument('--batch_size', nargs='?', type=int, default=None)
+parser.add_argument('--fold', help='config file path', type=int)
+parser.add_argument('--save_path', help='config file path', type=str)
 args = parser.parse_args()
 config = load_yaml(args.config_path, args)
 
@@ -35,17 +49,17 @@ model = ModelClass(
         config["enet_type"],
         out_dim=config["out_dim"],
         pretrained=config["pretrained"] )     
+device = torch.device('cuda')
 model = model.to(device)
 
 
 def gen_onnx(args):
-    stream = open(args.config, 'r', encoding='utf-8')
 
 
     if config["eval"] == 'best':    
-        model_file = os.path.join(config["model_dir"], f'best_fold{fold}.pth')
+        model_file = os.path.join(config["model_dir"], f'best_fold{args.fold}.pth')
     if config["eval"] == 'final':
-        model_file = os.path.join(config["model_dir"], f'final_fold{fold}.pth')
+        model_file = os.path.join(config["model_dir"], f'final_fold{args.fold}.pth')
 
 
     try:  # single GPU model_file
@@ -61,14 +75,20 @@ def gen_onnx(args):
     
 
     img = cv2.imread(args.img_path)
-    img1 = Image.fromarray(img).convert('RGB')
     transforms_train, transforms_val = get_transforms(config["image_size"])   
-    img1 = transforms.ToTensor()(img1)
-    img1 = transforms_val(image=img1)
+    # img1 = transforms.ToTensor()(img1)
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    res = transforms_val(image=img)
+    img1 = res['image'].astype(np.float32)
+    img1 = img1.transpose(2, 0, 1)
+    img1 = torch.tensor([img1]).float()
 
     s = time.time()
     with torch.no_grad():
-        out = model(img1)
+        out = model(img1.to(device))
+        probs = out.cpu().detach().numpy()
+        print (">>>>>",probs)
+    
     print('cost time:',time.time()-s)
     if isinstance(out,dict):
         out = out['f_score']
@@ -80,22 +100,17 @@ def gen_onnx(args):
     input_names = ["input"]
     # output_names = ["hm" , "wh"  , "reg"]
     output_names = ["out"]
-    inputs = torch.randn(args.batch_size, 3,w,h).cuda()
+    dynamic_axes = {'input': {0: 'batch'}, 'out': {0: 'batch'}}
+    inputs = torch.randn(args.batch_size, 3,512,512).cuda()
+    export_type = torch.onnx.OperatorExportTypes.ONNX
     torch_out = torch.onnx._export(model, inputs, output_onnx, export_params=True, verbose=False,do_constant_folding=False,keep_initializers_as_inputs=True,
-                                   input_names=input_names, output_names=output_names)
+                                   input_names=input_names, output_names=output_names, operator_export_type=export_type, dynamic_axes=dynamic_axes)
 
 
     onnx_path = args.save_path
     session = onnxruntime.InferenceSession(onnx_path)
-    # session.get_modelmeta()
-    # input_name = session.get_inputs()[0].name
-    # output_name = session.get_outputs()[0].name
 
-    image = img / 255.0
-    # mean = np.array([0.485, 0.456, 0.406])
-    # std = np.array([0.229, 0.224, 0.225])
-    # image = (image - mean) / std
-    image = np.transpose(image, [2, 0, 1])
+    image = img1.cpu().detach().numpy()
     image = np.expand_dims(image, axis=0)
     image = image.astype(np.float32)
 
@@ -110,13 +125,4 @@ def gen_onnx(args):
     print('error_distance:',np.abs((out.cpu().detach().numpy()-preds)).mean())
     
 if __name__ == "__main__":    
-    parser = argparse.ArgumentParser(description='Hyperparams')
-    parser.add_argument('--img_path', nargs='?', type=str, default=None)
-    parser.add_argument('--save_path', nargs='?', type=str, default=None)
-    parser.add_argument('--batch_size', nargs='?', type=int, default=None)
-    parser.add_argument('--max_size', nargs='?', type=int, default=None)
-    parser.add_argument('--algorithm', nargs='?', type=str, default=None)
-    parser.add_argument('--add_padding', action='store_true', default=False)
-    
-    args = parser.parse_args()
     gen_onnx(args)

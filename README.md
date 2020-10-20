@@ -55,7 +55,7 @@ python test.py --config_path "conf/effb3_ns.yaml"
 
 5、模型转换
 ```
-    转onnx：python tools/pytorch_to_onnx.py
+    转onnx：python tools/pytorch_to_onnx.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --batch_size 4 --fold 0 --save_path "lp.onnx"
     转tensorrt：python tools/onnx_to_tensorrt.py
 ```
 
