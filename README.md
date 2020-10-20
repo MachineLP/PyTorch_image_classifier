@@ -1,6 +1,5 @@
 
 
-
 # CV 训练/测试/部署分类任务
 
 |      ***       |   具体     |    样例   |  
@@ -66,6 +65,9 @@ python test.py --config_path "conf/effb3_ns.yaml"
 
 
 
+
+#
+
 #
 
 #
@@ -82,6 +84,8 @@ python test.py --config_path "conf/effb3_ns.yaml"
 ```
 （1）https://github.com/haqishen/SIIM-ISIC-Melanoma-Classification-1st-Place-Solution
 （2）https://github.com/BADBADBADBOY/pytorchOCR
+（3）https://github.com/MachineLP/QDServing
+（4）https://github.com/bentoml/BentoML
 ```
 
 
