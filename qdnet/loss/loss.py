@@ -77,7 +77,8 @@ class Loss(object):
                 with torch.no_grad():
                     images_cutmix, targets_cutmix = self.cutmix(images, targets, alpha2)
                 outputs_cutmix = model(images_cutmix)
-                loss = self.mixup_criterion(outputs_cutmix, targets_cutmix) 
+                loss = self.cutmix_criterion(outputs_cutmix, targets_cutmix) 
+        
         else:
             outputs = model(images)
             loss = self.criterion(outputs, targets)
