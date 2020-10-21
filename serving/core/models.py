@@ -69,9 +69,9 @@ class QDNetModel():
     def predict(self, data):
         if os.path.isfile(data):
             image = cv2.imread(data)
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         else:
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         res = self.transforms_val(image=image)
         image = res['image'].astype(np.float32)
 
