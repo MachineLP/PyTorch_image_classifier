@@ -3,12 +3,15 @@ import torch
 import numpy as np
 import torch.nn as nn
 from qdnet.loss.focal_loss import FocalLoss
+from qdnet.loss.ce_label_smoothing import CrossEntropyLossWithLabelSmoothing
 
 class Loss(object):
-    def __init__(self, loss_type="ce", w=None):
+    def __init__(self, out_dim, loss_type="ce", w=None):
         # w=torch.tensor([10,2,15,20],dtype=torch.float)  
         if loss_type == "ce_loss":
             self.criterion = nn.CrossEntropyLoss(reduction='mean')
+        if loss_type == "ce_smothing_loss":
+            self.criterion = CrossEntropyLossWithLabelSmoothing(out_dim)
         elif loss_type == "focal_loss":
             device = torch.device('cuda')
             self.criterion = FocalLoss().to(device)

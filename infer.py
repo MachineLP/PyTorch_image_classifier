@@ -56,8 +56,10 @@ def main():
 
     model = ModelClass(
             enet_type = config["enet_type"],     
-            out_dim = config["out_dim"],         
-            drop_nums = config["drop_nums"]  )
+            out_dim = int(config["out_dim"]),         
+            drop_nums = int(config["drop_nums"]),
+            margin_strategy = config["metric_strategy"]
+            )
     model = model.to(device)
 
     try:  # single GPU model_file

@@ -54,7 +54,7 @@ def val_epoch(model, loader, mel_idx, get_output=False):
             PROBS.append(probs.detach().cpu())
             TARGETS.append(target.detach().cpu())
 
-            loss = Loss(loss_type=config["loss_type"])(model, data, target, mixup_cutmix=False)
+            loss = Loss(out_dim=int(config["out_dim"]), loss_type=config["loss_type"])(model, data, target, mixup_cutmix=False)
             val_loss.append(loss.detach().cpu().numpy())
 
     val_loss = np.mean(val_loss)
@@ -95,7 +95,8 @@ def main():
         model = ModelClass(
             enet_type = config["enet_type"],     
             out_dim = int(config["out_dim"]),         
-            drop_nums = int(config["drop_nums"])   
+            drop_nums = int(config["drop_nums"]),
+            margin_strategy = config["metric_strategy"]
         )
         model = model.to(device)
 

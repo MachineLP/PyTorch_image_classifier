@@ -57,7 +57,7 @@ def train_epoch(model, loader, optimizer):
         
         data, target = data.to(device), target.to(device)
 
-        loss = Loss(loss_type=config["loss_type"])(model, data, target, mixup_cutmix=config["mixup_cutmix"])
+        loss = Loss(out_dim=int(config["out_dim"]), loss_type=config["loss_type"])(model, data, target, mixup_cutmix=config["mixup_cutmix"])
 
         if not config["use_amp"]:
             loss.backward()
@@ -99,7 +99,7 @@ def val_epoch(model, loader, mel_idx, get_output=False):
             PROBS.append(probs.detach().cpu())
             TARGETS.append(target.detach().cpu())
 
-            loss = Loss(loss_type=config["loss_type"])(model, data, target, mixup_cutmix=False)
+            loss = Loss(out_dim=int(config["out_dim"]), loss_type=config["loss_type"])(model, data, target, mixup_cutmix=False)
             val_loss.append(loss.detach().cpu().numpy())
 
     val_loss = np.mean(val_loss)
@@ -129,7 +129,8 @@ def run(fold, df, transforms_train, transforms_val, mel_idx):
         enet_type = config["enet_type"],
         out_dim = int(config["out_dim"]),
         drop_nums = int(config["drop_nums"]),
-        pretrained = config["pretrained"]
+        pretrained = config["pretrained"],
+        margin_strategy = config["metric_strategy"]
     )
     if DP:
         model = apex.parallel.convert_syncbn_model(model)

@@ -3,12 +3,14 @@ data_dir : "./data/"
 data_folder : "./data/"
 image_size : 512
 enet_type : "tf_efficientnet_b4_ns"  # tf_efficientnet_b4_ns/resnest101/seresnext101
+metric_strategy : False
 batch_size : 8
 num_workers : 4
 init_lr : 3e-5
 out_dim : 2
 n_epochs : 15
 drop_nums : 1
+loss_type : "ce_loss"  # ce_loss, ce_smothing_loss, focal_loss, bce_loss(多标签，待支持), mlsm_loss(多标签，待支持)
 use_amp : False
 mixup_cutmix : False
 model_dir : "./tf_efficientnet_b4_ns/weight/"
