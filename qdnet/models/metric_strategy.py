@@ -23,8 +23,6 @@ class Swish_module(nn.Module):
         return Swish.apply(x)
 
 
-
-
 class ArcMarginProduct_subcenter(nn.Module):
     def __init__(self, in_features, out_features, k=3):
         super().__init__()
