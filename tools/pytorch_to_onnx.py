@@ -77,7 +77,7 @@ def gen_onnx(args):
     img = cv2.imread(args.img_path)
     transforms_train, transforms_val = get_transforms(config["image_size"])   
     # img1 = transforms.ToTensor()(img1)
-    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     res = transforms_val(image=img)
     img1 = res['image'].astype(np.float32)
     img1 = img1.transpose(2, 0, 1)
