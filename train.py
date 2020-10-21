@@ -57,10 +57,7 @@ def train_epoch(model, loader, optimizer):
         
         data, target = data.to(device), target.to(device)
 
-        loss = Loss()(model, data, target, mixup_cutmix=config["mixup_cutmix"])
-        
-        #logits = model(data)        
-        #loss = criterion(logits, target)
+        loss = Loss(loss_type=config["loss_type"])(model, data, target, mixup_cutmix=config["mixup_cutmix"])
 
         if not config["use_amp"]:
             loss.backward()
@@ -85,7 +82,7 @@ def get_trans(img):
    return img
 
 
-def val_epoch(model, loader, mel_idx, n_test=1, get_output=False):
+def val_epoch(model, loader, mel_idx, get_output=False):
 
     model.eval()
     val_loss = []
@@ -97,18 +94,12 @@ def val_epoch(model, loader, mel_idx, n_test=1, get_output=False):
             data, target = data.to(device), target.to(device)
             logits = torch.zeros((data.shape[0], int(config["out_dim"]))).to(device)
             probs = torch.zeros((data.shape[0], int(config["out_dim"]))).to(device)
-            for I in range(n_test):
-                l = model(get_trans(data))
-                logits += l
-                probs += l.softmax(1)
-            logits /= n_test
-            probs /= n_test
 
             LOGITS.append(logits.detach().cpu())
             PROBS.append(probs.detach().cpu())
             TARGETS.append(target.detach().cpu())
 
-            loss = criterion(logits, target)
+            loss = Loss(loss_type=config["loss_type"])(model, data, target, mixup_cutmix=False)
             val_loss.append(loss.detach().cpu().numpy())
 
     val_loss = np.mean(val_loss)

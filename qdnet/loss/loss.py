@@ -5,6 +5,19 @@ import torch.nn as nn
 from qdnet.loss.focal_loss import FocalLoss
 
 class Loss(object):
+    def __init__(self, loss_type="ce", w=None):
+        # w=torch.tensor([10,2,15,20],dtype=torch.float)  
+        if loss_type == "ce_loss":
+            self.criterion = nn.CrossEntropyLoss(reduction='mean')
+        elif loss_type == "focal_loss":
+            device = torch.device('cuda')
+            self.criterion = FocalLoss().to(device)
+        elif loss_type == "bce_loss":
+            self.criterion = nn.BCEWithLogitsLoss(w)
+        elif loss_type == "mlsm_loss":
+            self.criterion = nn.MultiLabelSoftMarginLoss(w)  
+        else:
+            raise NotImplementedError()
     
     def __init__(self):
         self.criterion = nn.CrossEntropyLoss(reduction='mean')

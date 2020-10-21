@@ -25,6 +25,7 @@ from qdnet.dataaug.dataaug import get_transforms
 from qdnet.models.effnet import Effnet
 from qdnet.models.resnest import Resnest
 from qdnet.models.se_resnext import SeResnext
+from qdnet.loss.loss import Loss
 from qdnet.conf.constant import Constant
 
 
@@ -35,7 +36,7 @@ args = parser.parse_args()
 config = load_yaml(args.config_path, args)
 
 
-def val_epoch(model, loader, mel_idx, n_test=1, get_output=False):
+def val_epoch(model, loader, mel_idx, get_output=False):
 
     model.eval()
     val_loss = []
@@ -48,18 +49,12 @@ def val_epoch(model, loader, mel_idx, n_test=1, get_output=False):
             data, target = data.to(device), target.to(device)
             logits = torch.zeros((data.shape[0], int(config["out_dim"]))).to(device)  
             probs = torch.zeros((data.shape[0], int(config["out_dim"]))).to(device)  
-            for I in range(n_test):
-                l = model(data)
-                logits += l
-                probs += l.softmax(1)
-            logits /= n_test
-            probs /= n_test
 
             LOGITS.append(logits.detach().cpu())
             PROBS.append(probs.detach().cpu())
             TARGETS.append(target.detach().cpu())
 
-            loss = criterion(logits, target)
+            loss = Loss(loss_type=config["loss_type"])(model, data, target, mixup_cutmix=False)
             val_loss.append(loss.detach().cpu().numpy())
 
     val_loss = np.mean(val_loss)
@@ -116,7 +111,7 @@ def main():
 
         model.eval()
 
-        this_LOGITS, this_PROBS = val_epoch(model, valid_loader, mel_idx, n_test=1, get_output=True)
+        this_LOGITS, this_PROBS = val_epoch(model, valid_loader, mel_idx, get_output=True)
         LOGITS.append(this_LOGITS)
         PROBS.append(this_PROBS)
         dfs.append(df_valid)
