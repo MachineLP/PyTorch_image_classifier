@@ -3,7 +3,6 @@ import os
 import yaml
 import threading
 import numpy as np
-from easydict import EasyDict as edict
 
 def merge_config(config,args):
     for key_1 in config.keys():
