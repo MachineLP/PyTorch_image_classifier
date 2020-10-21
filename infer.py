@@ -6,10 +6,6 @@
    Date :         2020-10-20
 -------------------------------------------------
 '''
-
-
-# -*- coding:utf-8 -*-
-
 import os
 import time
 import random
@@ -37,7 +33,7 @@ from qdnet.models.effnet import Effnet
 from qdnet.models.resnest import Resnest
 from qdnet.models.se_resnext import SeResnext
 from qdnet.conf.constant import Constant
-
+device = torch.device('cuda')
 
 parser = argparse.ArgumentParser(description='Hyperparams')
 parser.add_argument('--config_path', help='config file path')
@@ -47,62 +43,61 @@ args = parser.parse_args()
 config = load_yaml(args.config_path, args)
 
 
-def main():
 
-    if config["eval"] == 'best':     
-        model_file = os.path.join(config["model_dir"], f'best_fold{args.fold}.pth')
-    if config["eval"] == 'final':    
-        model_file = os.path.join(config["model_dir"], f'final_fold{args.fold}.pth')
+class QDNetModel():
 
-    model = ModelClass(
+    def __init__(self, config, fold):
+
+        if config["enet_type"] in Constant.RESNEST_LIST:   
+            ModelClass = Resnest
+        elif config["enet_type"] in Constant.SERESNEXT_LIST:
+            ModelClass = SeResnext
+        elif config["enet_type"] in Constant.GEFFNET_LIST:
+            ModelClass = Effnet
+        else:
+            raise NotImplementedError()
+
+        if config["eval"] == 'best':     
+            model_file = os.path.join(config["model_dir"], f'best_fold{fold}.pth')
+        if config["eval"] == 'final':    
+            model_file = os.path.join(config["model_dir"], f'final_fold{fold}.pth')
+        self.model = ModelClass(
             enet_type = config["enet_type"],     
             out_dim = int(config["out_dim"]),         
             drop_nums = int(config["drop_nums"]),
             margin_strategy = config["metric_strategy"]
             )
-    model = model.to(device)
+        self.model = self.model.to(device)
 
-    try:  # single GPU model_file
-        model.load_state_dict(torch.load(model_file), strict=True)
-    except:  # multi GPU model_file
-        state_dict = torch.load(model_file)
-        state_dict = {k[7:] if k.startswith('module.') else k: state_dict[k] for k in state_dict.keys()}
-        model.load_state_dict(state_dict, strict=True)
+        try:  # single GPU model_file
+            self.model.load_state_dict(torch.load(model_file), strict=True)
+        except:  # multi GPU model_file
+            state_dict = torch.load(model_file)
+            state_dict = {k[7:] if k.startswith('module.') else k: state_dict[k] for k in state_dict.keys()}
+            self.model.load_state_dict(state_dict, strict=True)
+        self.model.eval()
 
-    _, transforms_val = get_transforms(config["image_size"])  
-
-    image = cv2.imread(args.img_path)
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    res = transforms_val(image=image)
-    image = res['image'].astype(np.float32)
-
-    image = image.transpose(2, 0, 1)
-    data = torch.tensor([image]).float()
-
-    model.eval()
-    probs = model( data.to(device) )
-    probs = probs.cpu().detach().numpy()
-    print (">>>>>",probs)
-    return probs.argmax(1)
+        _, self.transforms_val = get_transforms(config["image_size"])  
 
 
-       
+    def predict(self, data):
+        if os.path.isfile(data):
+            image = cv2.imread(data)
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        else:
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        res = self.transforms_val(image=image)
+        image = res['image'].astype(np.float32)
+
+        image = image.transpose(2, 0, 1)
+        data = torch.tensor([image]).float()
+        probs = self.model( data.to(device) )
+        probs = probs.cpu().detach().numpy()
+        return probs.argmax(1)
 
 
 if __name__ == '__main__':
 
-    if config["enet_type"] in Constant.RESNEST_LIST:   
-        ModelClass = Resnest
-    elif config["enet_type"] in Constant.SERESNEXT_LIST:
-        ModelClass = SeResnext
-    elif config["enet_type"] in Constant.GEFFNET_LIST:
-        ModelClass = Effnet
-    else:
-        raise NotImplementedError()
-
-    device = torch.device('cuda')
-
-    pre = main()
-
+    qd_model = QDNetModel(config, args.fold)
+    pre = qd_model.predict(args.img_path)
     print ("pre>>>>>", pre)
-
