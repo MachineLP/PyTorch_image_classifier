@@ -12,7 +12,7 @@ drop_nums : 1
 use_amp : False
 model_dir : "./seresnext101/weight/"
 log_dir : "./seresnext101/logs/"
-CUDA_VISIBLE_DEVICES : "0"
+CUDA_VISIBLE_DEVICES : "0"   # 多GPU训练："0,1,2,3"
 fold : "0,1,2,3,4"
 pretrained : True
 eval : "best"                  # "best", "final"

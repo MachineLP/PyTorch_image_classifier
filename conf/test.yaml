@@ -13,7 +13,7 @@ use_amp : False
 mixup_cutmix : False
 model_dir : "./tf_efficientnet_b3_ns/weight/"
 log_dir : "./tf_efficientnet_b3_ns/logs/"
-CUDA_VISIBLE_DEVICES : "0"
+CUDA_VISIBLE_DEVICES : "0"   # 多GPU训练："0,1,2,3"
 fold : "0,1,2,3,4"
 pretrained : True
 eval : "best"                  # "best", "final"
