@@ -18,6 +18,7 @@ import pandas as pd
 from tqdm import tqdm
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 from qdnet.conf.config import load_yaml
 from qdnet.optimizer.optimizer import GradualWarmupSchedulerV2
@@ -77,6 +78,7 @@ class QDNetModel():
         image = image.transpose(2, 0, 1)
         data = torch.tensor([image]).float()
         probs = self.model( data.to(device) )
+        probs = F.softmax(probs,dim =1)
         probs = probs.cpu().detach().numpy()
         return probs.argmax(1)
 

@@ -92,6 +92,7 @@ class QDNetModel():
         image = image.transpose(2, 0, 1)
         data = torch.tensor([image]).float()
         probs = self.model( data.to(device) )
+        probs = F.softmax(probs,dim =1)
         probs = probs.cpu().detach().numpy()
         return probs.argmax(1)
 
