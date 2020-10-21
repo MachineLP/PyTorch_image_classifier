@@ -25,8 +25,8 @@
 ## 训练/测试/部署流程：
 0、转为训练需要的数据格式
 ```
-pip install -r requirements.txt
 git clone https://github.com/MachineLP/PyTorch_image_classifier
+pip install -r requirements.txt
 cd PyTorch_image_classifier
 python tools/data_preprocess.py --data_dir "./data/data.csv" --n_splits 5 --output_dir "./data/train.csv" --random_state 2020
 ```
