@@ -27,6 +27,7 @@ from qdnet.models.effnet import Effnet
 from qdnet.models.resnest import Resnest
 from qdnet.models.se_resnext import SeResnext
 from qdnet.conf.constant import Constant
+device = torch.device('cuda')
 
 class QDNetModel():
 
