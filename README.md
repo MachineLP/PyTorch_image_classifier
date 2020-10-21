@@ -40,7 +40,7 @@ python train.py --config_path "conf/effb3_ns.yaml"
 
 3、测试
 ```
-python test.py --config_path "conf/effb3_ns.yaml"
+python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
 ```
 
 4、infer

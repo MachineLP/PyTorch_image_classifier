@@ -30,6 +30,7 @@ from qdnet.conf.constant import Constant
 
 parser = argparse.ArgumentParser(description='Hyperparams')
 parser.add_argument('--config_path', help='config file path')
+parser.add_argument('--n_splits', help='n_splits', type=int)
 args = parser.parse_args()
 config = load_yaml(args.config_path, args)
 
@@ -84,7 +85,7 @@ def main():
     LOGITS = []
     PROBS = []
     dfs = []
-    for fold in range(5):
+    for fold in range(args.n_splits):
 
         df_valid = df[df['fold'] == fold]
 
@@ -126,7 +127,7 @@ def main():
     auc_all_raw = roc_auc_score(dfs['target'] == mel_idx, dfs['pred'])
 
     dfs2 = dfs.copy()
-    for i in range(5):
+    for i in range(args.n_splits):
         dfs2.loc[dfs2['fold'] == i, 'pred'] = dfs2.loc[dfs2['fold'] == i, 'pred'].rank(pct=True)
     auc_all_rank = roc_auc_score(dfs2['target'] == mel_idx, dfs2['pred'])
     
