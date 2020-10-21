@@ -5,11 +5,11 @@
 |      ***       |   具体     |    样例   |  
 | :-----------------: | :---------:| :---------:|
 |  模型方面  |   (efficientnet/resnest/seresnext等)       |  [1](./qdnet/conf/constant.py)  |
-|  metric方面  |   (Swish/ArcMarginProduct_subcenter/ArcFaceLossAdaptiveMargin等)       |  [1](./qdnet/models/metric_strategy.py)  |
-|  数据增强  |   (旋转/镜像/对比度等、mixup/cutmix)         |  [2](./qdnet/dataaug/) | 
-|  损失函数  |   (ce_loss/ce_smothing_loss/focal_loss/bce_loss等)                     |  [3](./qdnet/loss/)    | 
-|  模型部署  |   (flask/grpc/BentoML等)                   |  [4](./serving/)       | 
-|  onnx/trt |   ()                                      |  [5](./tools/)         | 
+|  metric方面  |   (Swish/ArcMarginProduct_subcenter/ArcFaceLossAdaptiveMargin等)       |  [2](./qdnet/models/metric_strategy.py)  |
+|  数据增强  |   (旋转/镜像/对比度等、mixup/cutmix)         |  [3](./qdnet/dataaug/) | 
+|  损失函数  |   (ce_loss/ce_smothing_loss/focal_loss/bce_loss等)                     |  [4](./qdnet/loss/)    | 
+|  模型部署  |   (flask/grpc/BentoML等)                   |  [5](./serving/)       | 
+|  onnx/trt |   ()                                      |  [6](./tools/)         | 
 
 
 ## 支持的全部模型：
