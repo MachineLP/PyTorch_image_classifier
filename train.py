@@ -78,9 +78,6 @@ def train_epoch(model, loader, optimizer):
     return train_loss
 
 
-def get_trans(img):
-   return img
-
 
 def val_epoch(model, loader, mel_idx, get_output=False):
 
@@ -145,7 +142,7 @@ def run(fold, df, transforms_train, transforms_val, mel_idx):
         model, optimizer = amp.initialize(model, optimizer, opt_level="O1")
     if DP:
         model = nn.DataParallel(model)
-#     scheduler_cosine = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, int(config["n_epochs"]) - 1) 
+    #scheduler_cosine = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, int(config["n_epochs"]) - 1) 
     scheduler_cosine = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, int(config["n_epochs"]) - 1) 
     scheduler_warmup = GradualWarmupSchedulerV2(optimizer, multiplier=10, total_epoch=1, after_scheduler=scheduler_cosine)
     
@@ -153,7 +150,6 @@ def run(fold, df, transforms_train, transforms_val, mel_idx):
 
     for epoch in range(1, int(config["n_epochs"]) + 1): 
         print(time.ctime(), f'Fold {fold}, Epoch {epoch}')
-#         scheduler_warmup.step(epoch - 1)
 
         train_loss = train_epoch(model, train_loader, optimizer)
         val_loss, acc, auc = val_epoch(model, valid_loader, mel_idx)
@@ -164,7 +160,7 @@ def run(fold, df, transforms_train, transforms_val, mel_idx):
             appender.write(content + '\n')
 
         scheduler_warmup.step()    
-        if epoch==2: scheduler_warmup.step() # bug workaround   
+        if epoch==2: scheduler_warmup.step() 
             
         if auc > auc_max:
             print('auc_max ({:.6f} --> {:.6f}). Saving model ...'.format(auc_max, auc))
