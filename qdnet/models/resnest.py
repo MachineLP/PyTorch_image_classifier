@@ -45,9 +45,9 @@ class Resnest(nn.Module):
         else:
              for i, dropout in enumerate(self.dropouts):
                  if i == 0:
-                 out = self.classify(dropout(x))
-             else:
-                 out += self.classify(dropout(x))
+                     out = self.classify(dropout(x))
+                 else:
+                     out += self.classify(dropout(x))
              out /= len(self.dropouts)
         return out
  

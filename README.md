@@ -50,10 +50,8 @@ python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
 4、infer
 ```
     python infer.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --fold "0"
-    >>>>> [[-5.08535   4.999839]]
     pre>>>>> [1]
-    python infer.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/1female/1(5).jpg" --fold "0"
-    >>>>> [[ 3.4123473 -3.469294 ]]
+    python infer.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/1female/1(5).jpg" --fold "1"
     pre>>>>> [0]
 ```
 

@@ -65,7 +65,7 @@ class QDNetModel():
             enet_type = config["enet_type"],     
             out_dim = int(config["out_dim"]),         
             drop_nums = int(config["drop_nums"]),
-            margin_strategy = config["metric_strategy"]
+            metric_strategy = config["metric_strategy"]
             )
         self.model = self.model.to(device)
 
