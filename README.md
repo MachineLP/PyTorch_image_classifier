@@ -2,6 +2,9 @@
 
 # CV 训练/测试/部署分类任务
 
+![demo](https://user-images.githubusercontent.com/9102141/87268895-3e0d0780-c4fe-11ea-849e-6140b7e0d4de.gif)
+
+
 |      ***       |   具体     |    样例   |  
 | :-----------------: | :---------:| :---------:|
 |  模型方面  |   (efficientnet/resnest/seresnext等)       |  [1](./qdnet/conf/constant.py)  |
