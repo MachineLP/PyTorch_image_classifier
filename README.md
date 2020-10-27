@@ -1,21 +1,21 @@
 
 
-# CV 训练/测试/部署分类任务
+# CV Easy-to-use/Easy-to-deploy/Easy-to-develop
 
 <img src="https://user-images.githubusercontent.com/9102141/87268895-3e0d0780-c4fe-11ea-849e-6140b7e0d4de.gif" width = "300" height = "200" alt="图片名称" align=center> <img src="https://user-images.githubusercontent.com/9102141/87268895-3e0d0780-c4fe-11ea-849e-6140b7e0d4de.gif" width = "300" height = "200" alt="图片名称" align=center>
 
 
-|      ***       |   具体     |    样例   |  
+|      ***       |        |    example   |  
 | :-----------------: | :---------:| :---------:|
-|  模型方面  |   (efficientnet/resnest/seresnext等)       |  [1](./qdnet/conf/constant.py)  |
-|  metric方面  |   (Swish/ArcMarginProduct_subcenter/ArcFaceLossAdaptiveMargin等)       |  [2](./qdnet/models/metric_strategy.py)  |
-|  数据增强  |   (旋转/镜像/对比度等、mixup/cutmix)         |  [3](./qdnet/dataaug/) | 
-|  损失函数  |   (ce_loss/ce_smothing_loss/focal_loss/bce_loss等)                     |  [4](./qdnet/loss/)    | 
-|  模型部署  |   (flask/grpc/BentoML等)                   |  [5](./serving/)       | 
+|  models  |   (efficientnet/resnest/seresnext等)       |  [1](./qdnet/conf/constant.py)  |
+|  metric  |   (Swish/ArcMarginProduct_subcenter/ArcFaceLossAdaptiveMargin/...)       |  [2](./qdnet/models/metric_strategy.py)  |
+|  data aug  |   (rotate/flip/...、mixup/cutmix)         |  [3](./qdnet/dataaug/) | 
+|  loss  |   (ce_loss/ce_smothing_loss/focal_loss/bce_loss等)                     |  [4](./qdnet/loss/)    | 
+|  deploy  |   (flask/grpc/BentoML等)                   |  [5](./serving/)       | 
 |  onnx/trt |   ()                                      |  [6](./tools/)         | 
 
 
-## 支持的全部模型：
+## models：
 
 > RESNEST_LIST = ["resnest50", "resnest101", "resnest200", "resnest269"]
 
@@ -25,8 +25,8 @@
 
 #
 
-## 训练/测试/部署流程：
-0、转为训练需要的数据格式
+## train/test/deploy
+0、Data format transform 
 ```
 git clone https://github.com/MachineLP/PyTorch_image_classifier
 pip install -r requirements.txt
@@ -34,18 +34,18 @@ cd PyTorch_image_classifier
 python tools/data_preprocess.py --data_dir "./data/data.csv" --n_splits 5 --output_dir "./data/train.csv" --random_state 2020
 ```
 
-1、修改配置文件，选择需要的模型 以及 模型参数：vim conf/test.yaml
+1、Modify configuration file
 ```
 cp conf/test.yaml conf/effb3_ns.yaml
 vim conf/effb3_ns.yaml
 ```
 
-2、训练模型: （根据需求选取合适的模型） 
+2、train model: 
 ```
 python train.py --config_path "conf/effb3_ns.yaml"
 ```
 
-3、测试
+3、test
 ```
 python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
 ```
@@ -58,13 +58,13 @@ python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
     pre>>>>> [0]
 ```
 
-5、模型转换 (待调试)
+5、model transform
 ```
-    转onnx：python tools/pytorch_to_onnx.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --batch_size 4 --fold 0 --save_path "lp.onnx"
-    转tensorrt：python tools/onnx_to_tensorrt.py
+    onnx：python tools/pytorch_to_onnx.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --batch_size 4 --fold 0 --save_path "lp.onnx"
+    tensorrt：python tools/onnx_to_tensorrt.py
 ```
 
-6、模型部署
+6、model deploy
 [serving](./serving/) 
 
 
