@@ -12,7 +12,7 @@ Easy-to-use/Easy-to-deploy/Easy-to-develop
 |  models  |   (efficientnet/resnest/seresnext等)       |  [1](./qdnet/conf/constant.py)  |
 |  metric  |   (Swish/ArcMarginProduct_subcenter/ArcFaceLossAdaptiveMargin/...)       |  [2](./qdnet/models/metric_strategy.py)  |
 |  data aug  |   (rotate/flip/...、mixup/cutmix)         |  [3](./qdnet/dataaug/) | 
-|  loss  |   (ce_loss/ce_smothing_loss/focal_loss/bce_loss等)                     |  [4](./qdnet/loss/)    | 
+|  loss  |   (ce_loss/ce_smothing_loss/focal_loss/bce_loss/...)                     |  [4](./qdnet/loss/)    | 
 |  deploy  |   (flask/grpc/BentoML等)                   |  [5](./serving/)       | 
 |  onnx/trt |   ()                                      |  [6](./tools/)         | 
 
