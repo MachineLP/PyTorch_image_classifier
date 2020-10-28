@@ -1,6 +1,8 @@
 
 
-# CV Easy-to-use/Easy-to-deploy/Easy-to-develop
+# Image classfication
+
+Easy-to-use/Easy-to-deploy/Easy-to-develop
 
 <img src="https://user-images.githubusercontent.com/9102141/87268895-3e0d0780-c4fe-11ea-849e-6140b7e0d4de.gif" width = "300" height = "200" alt="图片名称" align=center> <img src="https://user-images.githubusercontent.com/9102141/87268895-3e0d0780-c4fe-11ea-849e-6140b7e0d4de.gif" width = "300" height = "200" alt="图片名称" align=center>
 
@@ -40,17 +42,17 @@ cp conf/test.yaml conf/effb3_ns.yaml
 vim conf/effb3_ns.yaml
 ```
 
-2、train model: 
+2、Train: 
 ```
 python train.py --config_path "conf/effb3_ns.yaml"
 ```
 
-3、test
+3、Test
 ```
 python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
 ```
 
-4、infer
+4、Infer
 ```
     python infer.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --fold "0"
     pre>>>>> [1]
@@ -58,7 +60,7 @@ python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
     pre>>>>> [0]
 ```
 
-5、model transform
+5、Deploying models
 ```
     onnx：python tools/pytorch_to_onnx.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --batch_size 4 --fold 0 --save_path "lp.onnx"
     tensorrt：python tools/onnx_to_tensorrt.py
