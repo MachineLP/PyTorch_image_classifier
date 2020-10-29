@@ -9,7 +9,7 @@ Easy-to-use/Easy-to-deploy/Easy-to-develop
 
 |      ***       |        |    example   |  
 | :-----------------: | :---------:| :---------:|
-|  models  |   (efficientnet/resnest/seresnext等)       |  [1](./qdnet/conf/constant.py)  |
+|  models  |   (efficientnet/mobilenet/resnest/seresnext等)       |  [1](./qdnet/conf/constant.py)  |
 |  metric  |   (Swish/ArcMarginProduct_subcenter/ArcFaceLossAdaptiveMargin/...)       |  [2](./qdnet/models/metric_strategy.py)  |
 |  data aug  |   (rotate/flip/...、mixup/cutmix)         |  [3](./qdnet/dataaug/) | 
 |  loss  |   (ce_loss/ce_smothing_loss/focal_loss/bce_loss/...)                     |  [4](./qdnet/loss/)    | 
@@ -19,7 +19,7 @@ Easy-to-use/Easy-to-deploy/Easy-to-develop
 
 ## models：
 
-> RESNEST_LIST = ["resnest50", "resnest101", "resnest200", "resnest269"]
+> RESNEST_LIST = ['resnest50', 'resnest101', 'resnest200', 'resnest269']
 
 > SERESNEXT_LIST = ['seresnext101']
 
