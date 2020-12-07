@@ -7,7 +7,9 @@ services:
       - "9930-9939:9930-9939"
     volumes:
       - .:/workspace
+    runtime: nvidia
     tty: true
     command: python serving/flask_run.py --config_path "conf/effb3_ns.yaml" --fold "0" > run.log
+    # command: gunicorn -w 3 -b 0.0.0.0:9949 serving/flask_run:app
     environment:
       - CUDA_VISIBLE_DEVICES=2
