@@ -60,7 +60,7 @@ python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
     pre>>>>> [0]
 ```
 
-5、Models transform
+5、Models transform ( https://github.com/NVIDIA-AI-IOT/torch2trt )
 ```
     onnx：python tools/pytorch_to_onnx.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --batch_size 4 --fold 0 --save_path "lp.onnx"
     tensorrt：python tools/onnx_to_tensorrt.py
