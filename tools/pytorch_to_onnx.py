@@ -102,10 +102,12 @@ def gen_onnx(args):
     output_names = ["out"]
     dynamic_axes = {'input': {0: 'batch'}, 'out': {0: 'batch'}}
     inputs = torch.randn(args.batch_size, 3,512,512).cuda()
+    '''
     export_type = torch.onnx.OperatorExportTypes.ONNX
     torch_out = torch.onnx._export(model, inputs, output_onnx, export_params=True, verbose=False,do_constant_folding=False,keep_initializers_as_inputs=True,
                                    input_names=input_names, output_names=output_names, operator_export_type=export_type, dynamic_axes=dynamic_axes)
-
+    '''
+    torch.onnx.export(model, inputs, output_onnx)
 
     onnx_path = args.save_path
     session = onnxruntime.InferenceSession(onnx_path)
