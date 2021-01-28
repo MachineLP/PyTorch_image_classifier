@@ -83,7 +83,7 @@ def gen_onnx(args):
     with torch.no_grad():
         out = model(img1.to(device))
         probs = out.cpu().detach().numpy()
-        print (">>>>>",probs)
+        print ("probs>>>>>",probs)
 
     print('cost time:',time.time()-s)
     if isinstance(out,dict):
@@ -114,10 +114,12 @@ def gen_onnx(args):
     print (">>>>>", image.shape)
     s = time.time()
     preds = session.run(['out'], {'input': image})
+    print ("preds>>>>>",preds)
     preds = preds[0]
-    print(time.time()-s)
+    print('cost time:', time.time()-s)
     if isinstance(preds,dict):
         preds = preds['f_score']
+
     cv2.imwrite('./onnx/onnx_output.jpg',preds[0,0]*255)
 
     print('error_distance:',np.abs((out.cpu().detach().numpy()-preds)).mean())
