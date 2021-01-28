@@ -10,36 +10,21 @@ import numpy as np
 import time
 import argparse
 import math
+from qdnet.conf.config import load_yaml
 from onnx_tensorrt.tensorrt_engine import Engine
 from qdnet.dataaug.dataaug import get_transforms
 
 
 parser = argparse.ArgumentParser(description='Hyperparams')
-parser.add_argument('--img_path', nargs='?', type=str, default=None)
-parser.add_argument('--config_path', help='config file path')
-parser.add_argument('--batch_size', nargs='?', type=int, default=None)
+parser.add_argument('--img_path', nargs='?', type=str, default='./data/img/0male/0(2).jpg')
+parser.add_argument('--config_path', help='config file path', default='conf/resnest101.yaml')
+parser.add_argument('--batch_size', nargs='?', type=int, default=4)
 parser.add_argument('--fold', help='config file path', type=int)
-parser.add_argument('--save_path', help='config file path', type=str)
-parser.add_argument('--trt_save_path', help='config file path', type=str)
+parser.add_argument('--save_path', help='config file path', type=str, default='lp_pp.onnx')
+parser.add_argument('--trt_save_path', help='config file path', type=str, default='lp.trt')
 args = parser.parse_args()
 config = load_yaml(args.config_path, args)
 
-
-if config["enet_type"] == 'resnest101':
-    ModelClass = Resnest
-elif config["enet_type"] == 'seresnext101':
-    ModelClass = SeResnext
-elif 'efficientnet' in config["enet_type"]:  
-    ModelClass = Effnet
-else:
-    raise NotImplementedError()
-
-model = ModelClass(
-        config["enet_type"],
-        out_dim=config["out_dim"],
-        pretrained=config["pretrained"] )     
-device = torch.device('cuda')
-model = model.to(device)
 
 def gen_trt_engine(args):
     TRT_LOGGER = trt.Logger(trt.Logger.WARNING) 
@@ -98,7 +83,7 @@ class ModelTensorRT:
             res = transforms_val(image=img)
             img1 = res['image'].astype(np.float32)
             img1 = img1.transpose(2, 0, 1)
-            inputs = img1.cpu().numpy()
+            inputs = img1
             inputs = np.expand_dims(inputs, axis=0)
             inputs = np.array(inputs, copy=True, dtype=np.float16)
             inp_batch = inputs.shape[0]
