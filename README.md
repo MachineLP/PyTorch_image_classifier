@@ -58,7 +58,7 @@ python test.py --config_path "conf/resnest101.yaml" --n_splits 5
 
 4、Infer
 ```
-   python infer.py --config_path "conf/resnest101.yaml" --img_path "./data/img/0male/0(2).jpg" --fold "0"
+    python infer.py --config_path "conf/resnest101.yaml" --img_path "./data/img/0male/0(2).jpg" --fold "0"
     pre>>>>> [1]
     python infer.py --config_path "conf/resnest101.yaml" --img_path "./data/img/1female/1(5).jpg" --fold "1"
     pre>>>>> [0]
@@ -82,7 +82,8 @@ python test.py --config_path "conf/resnest101.yaml" --n_splits 5
 
     tensorrt：python tools/onnx_to_tensorrt.py --config_path "conf/resnest101.yaml" --img_path "./data/img/0male/0(2).jpg" --batch_size 4 --fold 0 --save_path "lp_pp.onnx" --trt_save_path "lp.trt"
     '''
-    
+    outputs: tensor([[-0.1543,  0.3619]])
+    tensor([0.6263]) tensor([1])
     '''
 ```
 
