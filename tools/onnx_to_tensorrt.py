@@ -111,6 +111,7 @@ class ModelTensorRT:
                     li = i
                 outputs = np.vstack(outputs)
             outputs = torch.tensor(outputs)
+            print ("outputs:", outputs)
             outputs = F.softmax(outputs, dim=1).cpu()
             score, class_prediction = torch.max(outputs, 1)
             return score, class_prediction
