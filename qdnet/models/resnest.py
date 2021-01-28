@@ -24,7 +24,8 @@ class Resnest(nn.Module):
     def __init__(self, enet_type, out_dim, drop_nums=1, pretrained=False, metric_strategy=False):
         super(Resnest, self).__init__()
         if enet_type in ["resnest50", "resnest101", "resnest200", "resnest269"]:
-            self.enet = locals()[enet_type](pretrained=pretrained)
+            # self.enet = locals()[enet_type](pretrained=pretrained)
+            self.enet = eval(enet_type)(pretrained=pretrained)
         self.dropouts = nn.ModuleList([ nn.Dropout(0.5) for _ in range(drop_nums) ])
         in_ch = self.enet.fc.in_features
         self.fc = nn.Linear(in_ch, 512)
