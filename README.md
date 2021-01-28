@@ -36,16 +36,12 @@ cd PyTorch_image_classifier
 python tools/data_preprocess.py --data_dir "./data/data.csv" --n_splits 5 --output_dir "./data/train.csv" --random_state 2020
 ```
 
+## resnest101
 1、Modify configuration file
 
 ```
 cp conf/resnest101.yaml conf/resnest101.yaml
 vim conf/resnest101.yaml
-```
-
-```
-cp conf/test.yaml conf/effb3_ns.yaml
-vim conf/effb3_ns.yaml
 ```
 
 2、Train: 
@@ -54,18 +50,10 @@ vim conf/effb3_ns.yaml
 python train.py --config_path conf/resnest101.yaml
 ```
 
-```
-python train.py --config_path "conf/effb3_ns.yaml"
-```
-
 3、Test
 
 ```
 python test.py --config_path "conf/resnest101.yaml" --n_splits 5
-```
-
-```
-python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
 ```
 
 4、Infer
@@ -73,13 +61,6 @@ python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
    python infer.py --config_path "conf/resnest101.yaml" --img_path "./data/img/0male/0(2).jpg" --fold "0"
     pre>>>>> [1]
     python infer.py --config_path "conf/resnest101.yaml" --img_path "./data/img/1female/1(5).jpg" --fold "1"
-    pre>>>>> [0]
-```
-
-```
-    python infer.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --fold "0"
-    pre>>>>> [1]
-    python infer.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/1female/1(5).jpg" --fold "1"
     pre>>>>> [0]
 ```
 
@@ -102,6 +83,45 @@ python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
     tensorrt：python tools/onnx_to_tensorrt.py
 ```
 
+6、Deploying models
+[serving](./serving/) 
+
+
+#
+
+## effb3_ns
+1、Modify configuration file
+
+```
+cp conf/test.yaml conf/effb3_ns.yaml
+vim conf/effb3_ns.yaml
+```
+
+2、Train: 
+
+```
+python train.py --config_path "conf/effb3_ns.yaml"
+```
+
+3、Test
+
+
+```
+python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
+```
+
+4、Infer
+
+```
+    python infer.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --fold "0"
+    pre>>>>> [1]
+    python infer.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/1female/1(5).jpg" --fold "1"
+    pre>>>>> [0]
+```
+
+
+5、Models transform ( https://github.com/NVIDIA-AI-IOT/torch2trt )
+
 ```
     onnx：python tools/pytorch_to_onnx.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --batch_size 4 --fold 0 --save_path "lp.onnx"
     tensorrt：python tools/onnx_to_tensorrt.py
@@ -109,7 +129,6 @@ python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
 
 6、Deploying models
 [serving](./serving/) 
-
 
 
 
