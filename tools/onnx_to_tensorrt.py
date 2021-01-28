@@ -99,6 +99,7 @@ class ModelTensorRT:
             img1 = res['image'].astype(np.float32)
             img1 = img1.transpose(2, 0, 1)
             inputs = img1.cpu().numpy()
+            inputs = np.expand_dims(inputs, axis=0)
             inputs = np.array(inputs, copy=True, dtype=np.float16)
             inp_batch = inputs.shape[0]
             if inp_batch < self.inputs_shape[0]:
