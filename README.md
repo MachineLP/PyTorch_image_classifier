@@ -37,22 +37,45 @@ python tools/data_preprocess.py --data_dir "./data/data.csv" --n_splits 5 --outp
 ```
 
 1、Modify configuration file
+
+```
+cp conf/resnest101.yaml conf/resnest101.yaml
+vim conf/resnest101.yaml
+```
+
 ```
 cp conf/test.yaml conf/effb3_ns.yaml
 vim conf/effb3_ns.yaml
 ```
 
 2、Train: 
+
+```
+python train.py --config_path conf/resnest101.yaml
+```
+
 ```
 python train.py --config_path "conf/effb3_ns.yaml"
 ```
 
 3、Test
+
+```
+python test.py --config_path "conf/resnest101.yaml" --n_splits 5
+```
+
 ```
 python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
 ```
 
 4、Infer
+```
+   python infer.py --config_path "conf/resnest101.yaml" --img_path "./data/img/0male/0(2).jpg" --fold "0"
+    pre>>>>> [1]
+    python infer.py --config_path "conf/resnest101.yaml" --img_path "./data/img/1female/1(5).jpg" --fold "1"
+    pre>>>>> [0]
+```
+
 ```
     python infer.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --fold "0"
     pre>>>>> [1]
@@ -60,7 +83,25 @@ python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
     pre>>>>> [0]
 ```
 
+
 5、Models transform ( https://github.com/NVIDIA-AI-IOT/torch2trt )
+
+```
+    onnx：python tools/pytorch_to_onnx.py --config_path "conf/resnest101.yaml" --img_path "./data/img/0male/0(2).jpg" --batch_size 4 --fold 0 --save_path "lp.onnx"
+    '''
+    load model ok.....
+    >>>>> [[-0.15416172  0.36190417]]
+    cost time: 0.050855159759521484
+    ==> Exporting model to ONNX format at 'lp.onnx'
+    >>>>> (1, 3, 512, 512)
+    preds>>>>> [array([[-0.15416166,  0.36190417]], dtype=float32)]
+    cost time: 3.649467706680298
+    error_distance: 2.9802322e-08
+    '''
+
+    tensorrt：python tools/onnx_to_tensorrt.py
+```
+
 ```
     onnx：python tools/pytorch_to_onnx.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --batch_size 4 --fold 0 --save_path "lp.onnx"
     tensorrt：python tools/onnx_to_tensorrt.py
