@@ -80,7 +80,10 @@ python test.py --config_path "conf/resnest101.yaml" --n_splits 5
     error_distance: 2.9802322e-08
     '''
 
-    tensorrt：python tools/onnx_to_tensorrt.py
+    tensorrt：python tools/onnx_to_tensorrt.py --config_path "conf/resnest101.yaml" --img_path "./data/img/0male/0(2).jpg" --batch_size 4 --fold 0 --save_path "lp_pp.onnx" --trt_save_path "lp.trt"
+    '''
+    
+    '''
 ```
 
 6、Deploying models
