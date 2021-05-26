@@ -75,7 +75,7 @@ def train_epoch(model, loader, optimizer):
         bar.set_description('loss: %.5f, smth: %.5f' % (loss_np, smooth_loss))
 
     train_loss = np.mean(train_loss)
-    return train_loss, model
+    return train_loss
 
 
 
@@ -152,7 +152,7 @@ def run(fold, df, transforms_train, transforms_val, mel_idx):
     for epoch in range(1, int(config["n_epochs"]) + 1): 
         print(time.ctime(), f'Fold {fold}, Epoch {epoch}')
 
-        train_loss, model = train_epoch(model, train_loader, optimizer)
+        train_loss = train_epoch(model, train_loader, optimizer)
         val_loss, acc, auc = val_epoch(model, valid_loader, mel_idx)
 
         content = time.ctime() + ' ' + f'Fold {fold}, Epoch {epoch}, lr: {optimizer.param_groups[0]["lr"]:.7f}, train loss: {train_loss:.5f}, valid loss: {(val_loss):.5f}, acc: {(acc):.4f}, auc: {(auc):.6f}.'
