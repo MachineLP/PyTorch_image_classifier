@@ -90,7 +90,8 @@ def val_epoch(model, loader, mel_idx, get_output=False):
         for (data, target) in tqdm(loader):
             data, target = data.to(device), target.to(device)
             logits = torch.zeros((data.shape[0], int(config["out_dim"]))).to(device)
-            probs = torch.zeros((data.shape[0], int(config["out_dim"]))).to(device)
+            # probs = torch.zeros((data.shape[0], int(config["out_dim"]))).to(device)
+            probs = model(data)
 
             LOGITS.append(logits.detach().cpu())
             PROBS.append(probs.detach().cpu())
