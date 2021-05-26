@@ -108,7 +108,7 @@ def val_epoch(model, loader, mel_idx, get_output=False):
     if get_output:
         return LOGITS, PROBS
     else:
-        acc = (PROBS.argmax(1) == TARGETS).mean() * 100.
+        acc = (PROBS.argmax(1) == TARGETS).mean()
         auc = roc_auc_score((TARGETS == mel_idx).astype(float), PROBS[:, mel_idx])
         return val_loss, acc, auc
 
