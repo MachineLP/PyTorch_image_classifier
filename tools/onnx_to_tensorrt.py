@@ -64,7 +64,13 @@ def gen_trt_engine(args):
 class ModelTensorRT:
     def __init__(self):
         self.trt_logger = trt.Logger(trt.Logger.WARNING)
-        engine = gen_trt_engine(args)
+        if os.path.exists(trt_model):
+            # If a serialized engine exists, load it instead of building a new one.
+            print("Reading engine from file {}".format(trt_model))
+            with open(trt_model, "rb") as f, trt.Runtime(self.trt_logger) as runtime:
+                engine = runtime.deserialize_cuda_engine(f.read())
+        else:
+            engine = gen_trt_engine(onnx_model, trt_model)
         self.engine = Engine(engine)
         self.inputs_shape = self.engine.inputs[0].shape
         print('engine input shape', self.inputs_shape)
