@@ -65,7 +65,7 @@ python test.py --config_path "conf/resnest101.yaml" --n_splits 5
 ```
 
 
-5、Models transform ( https://github.com/NVIDIA-AI-IOT/torch2trt )
+5、Models transform ( https://github.com/NVIDIA-AI-IOT/torch2trt )([Tensorrt installation guide on Ubuntu1804](./docs/Tensorrt_installation_guide_on_Ubuntu1804.md))
 
 ```
     onnx：python tools/pytorch_to_onnx.py --config_path "conf/resnest101.yaml" --img_path "./data/img/0male/0(2).jpg" --batch_size 4 --fold 0 --save_path "lp.onnx"
@@ -124,7 +124,7 @@ python test.py --config_path "conf/effb3_ns.yaml" --n_splits 5
 ```
 
 
-5、Models transform ( https://github.com/NVIDIA-AI-IOT/torch2trt )
+5、Models transform ( https://github.com/NVIDIA-AI-IOT/torch2trt )([Tensorrt installation guide on Ubuntu1804](./docs/Tensorrt_installation_guide_on_Ubuntu1804.md))
 
 ```
     onnx：python tools/pytorch_to_onnx.py --config_path "conf/effb3_ns.yaml" --img_path "./data/img/0male/0(2).jpg" --batch_size 4 --fold 0 --save_path "lp.onnx"
