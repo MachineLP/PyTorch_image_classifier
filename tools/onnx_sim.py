@@ -1,8 +1,9 @@
 # pip install onnx-simplifier
 
 
-
+import onnx
 from onnxsim import simplify
+
 onnx_path = ""
 output_path = ""
 onnx_model = onnx.load(onnx_path)  # load onnx model
