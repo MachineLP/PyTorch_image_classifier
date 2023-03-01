@@ -3,7 +3,7 @@
 
 
 from onnxsim import simplify
-onnx_model = onnx.load(output_path)  # load onnx model
+onnx_model = onnx.load(onnx_path)  # load onnx model
 model_simp, check = simplify(onnx_model)
 assert check, "Simplified ONNX model could not be validated"
 onnx.save(model_simp, output_path)
