@@ -9,7 +9,7 @@ from torch.utils.data import Dataset
 
 from tqdm import tqdm
 
-def get_transforms(image_size):
+def get_transforms_(image_size):
 
     transforms_train = albumentations.Compose([
         albumentations.Transpose(p=0.5),
@@ -46,7 +46,7 @@ def get_transforms(image_size):
     return transforms_train, transforms_val
 
 
-def get_transforms_(image_size):
+def get_transforms(image_size):
 
     transforms_train = albumentations.Compose([
         albumentations.HorizontalFlip(p=0.5),
