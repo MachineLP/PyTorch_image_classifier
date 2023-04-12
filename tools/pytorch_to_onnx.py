@@ -106,15 +106,15 @@ def gen_onnx(args):
     # torch.onnx.export(model, inputs, output_onnx, input_names=input_names, output_names=output_names, dynamic_axes=dynamic_axes)
     # torch.onnx.export(model, inputs, output_onnx, verbose=False, export_params=True, training=False, opset_version=10, example_outputs=probs, input_names=input_names, output_names=output_names, dynamic_axes=dynamic_axes)
     torch.onnx.export(model, inputs, output_onnx)
-    '''
     onnx_path = args.save_path
     session = onnxruntime.InferenceSession(onnx_path)
+    input_name = session.get_inputs()[0].name
 
     image = img1.cpu().detach().numpy()
     image = image.astype(np.float32)
     print (">>>>>", image.shape)
     s = time.time()
-    preds = session.run(['out'], {'input': image})
+    preds = session.run([], {input_name: image})
     print ("preds>>>>>",preds)
     preds = preds[0]
     print('cost time:', time.time()-s)
@@ -124,7 +124,6 @@ def gen_onnx(args):
     cv2.imwrite('./onnx/onnx_output.jpg',preds[0,0]*255)
 
     print('error_distance:',np.abs((out.cpu().detach().numpy()-preds)).mean())
-    '''
 
 if __name__ == "__main__":
     gen_onnx(args)
