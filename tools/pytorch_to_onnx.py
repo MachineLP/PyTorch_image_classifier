@@ -5,7 +5,8 @@ sys.path.append('./')
 import yaml
 import math
 import argparse
-import torch.nn as nnimport torch
+import torch.nn as nn
+import torch
 import cv2
 import numpy as np
 import onnx
