@@ -2,7 +2,7 @@ torch==1.5.0
 albumentations==0.4.6
 resnest==0.0.6b20200823
 geffnet==0.9.8
-numpy==1.18.1
+numpy==1.22.0
 pandas==0.24.2
 apex==0.1
 opencv_python==4.4.0.42
